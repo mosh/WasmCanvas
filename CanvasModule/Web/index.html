@@ -1,0 +1,55 @@
+﻿<html>
+    <head>
+	<title>CanvasModule Test Page</title>
+	<script lang="javascript" src="wasm/RemObjectsElements.js"></script>
+	<script lang="javascript" src="wasm/CanvasModule.js"></script>
+    </head>
+    <body>
+	<div id="helloWorld"/>
+	<script lang="javascript">
+		CanvasModule.instantiate('wasm/CanvasModule.wasm').then(function (result) {
+			console.log('WebAssembly file CanvasModule.wasm has been loaded.');
+			var program = result.Program();
+
+			wasm(program);
+			jscript(program)
+
+			wasm(program);
+			jscript(program)
+
+		});
+	</script>
+
+	<script lang="javascript">
+
+		function jscript(program) {
+			var t0 = performance.now();
+			program.CallOutToJScript();
+			var t1 = performance.now();
+			console.log("Call to program.CallOutToJScript took " + (t1 - t0) + " milliseconds.")
+		};
+
+		function wasm(program) {
+		    var t0 = performance.now();
+		    program.AllInCode();
+		    var t1 = performance.now();
+		    console.log("Call to program.AllInCode took " + (t1 - t0) + " milliseconds.")
+		};
+
+
+		function fillCanvas(elementId, fillStyle, x, y, width, height) {
+			var canvas = document.getElementById(elementId);
+			var ctx = canvas.getContext('2d');
+
+			ctx.fillStyle = fillStyle;
+			ctx.fillRect(x, y, width, height);
+
+		}
+
+	</script>
+
+	<canvas id="firstCanvas" width="150" height="150"></canvas>
+	<canvas id="secondCanvas" width="150" height="200"></canvas>
+
+    </body>
+</html>
